@@ -111,7 +111,7 @@ namespace WebApplicationMVC.Controllers
                 Fecha = DateTime.Now
             };
 
-            return View();
+            return View(partido);
         }
     }
 }
