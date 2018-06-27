@@ -1,0 +1,10 @@
+
+Clase 26/06/2018
+
+1. se creo un proyecto nuevo para las entidades Prode.Core.Entidades
+	1.1 se creo la entidad equipo, partido y resultado
+	1.2 se agrego propiedads a las entidades.
+	1.3 se creo un controlador para partido
+	1.4 se creo un actionResult para el resultado del partido
+	1.5 se creo una vista para exponer el resultado del partido
+	
