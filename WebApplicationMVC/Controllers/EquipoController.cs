@@ -9,50 +9,40 @@ using Prode.Core.Entidades.Interfaces;
 
 namespace WebApplicationMVC.Controllers
 {
-    public class PartidoController : Controller
+    public class EquipoController : Controller
     {
         private readonly IFormateador formateador;
 
-
-        public PartidoController(IFormateador formateador)
+        public EquipoController(IFormateador formateador)
         {
             this.formateador = formateador;
         }
-        // GET: Partido
+        // GET: Equipo
         public ActionResult Index()
         {
-            var argentina = new Equipo
-            {
+            var argentina = new Equipo {
                 Nombre = "Argentina",
                 Abreviatura = "ARG"
             };
 
-            var brazil = new Equipo
-            {
-                Nombre = "Brazil",
-                Abreviatura = "BRA"
-            };
-
-            ViewBag.Argentina = formateador.NombreCompleto(argentina);
-
-            ViewBag.Brazil = formateador.NombreCompleto(brazil);
+            ViewBag.Nombre = formateador.NombreCompleto(argentina);
 
             return View();
         }
 
-        // GET: Partido/Details/5
+        // GET: Equipo/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Partido/Create
+        // GET: Equipo/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Partido/Create
+        // POST: Equipo/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -69,13 +59,13 @@ namespace WebApplicationMVC.Controllers
             }
         }
 
-        // GET: Partido/Edit/5
+        // GET: Equipo/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Partido/Edit/5
+        // POST: Equipo/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -92,13 +82,13 @@ namespace WebApplicationMVC.Controllers
             }
         }
 
-        // GET: Partido/Delete/5
+        // GET: Equipo/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Partido/Delete/5
+        // POST: Equipo/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -113,30 +103,6 @@ namespace WebApplicationMVC.Controllers
             {
                 return View();
             }
-        }
-
-        public IActionResult ResultadoPartido()
-        {
-
-            var partido = new Partido
-            {
-                EquipoLocal = new Equipo
-                {
-                    Abreviatura = "Arg",
-                    Nombre = "Argentina"
-                },
-
-                EquipoVisitante = new Equipo
-                {
-                    Abreviatura = "Bra",
-                    Nombre = "Nigeria"
-                },
-                GolesLocales = 2,
-                GolesVisitantes = 2,
-                Fecha = DateTime.Now
-            };
-
-            return View(partido);
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Prode.Core.Entidades.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Prode.Core.Entidades
 {
-    public class Partido
+    public class Partido : IPartido
     {
-        public Equipo EquipoLocal { get; set; }
+        public IEquipo EquipoLocal { get; set; }
 
-        public Equipo EquipoVisitante { get; set; }
+        public IEquipo EquipoVisitante { get; set; }
 
         public int GolesLocales { get; set; }
 
@@ -18,25 +19,23 @@ namespace Prode.Core.Entidades
 
         public string InformacionResultado
         {
-            get
+            get { 
+            var resultado = string.Empty;
+
+            if (GolesLocales > GolesVisitantes)
             {
-                var resultado = string.Empty;
+                resultado = $"Gano {EquipoLocal.Nombre}";
+            }
+            else if (GolesVisitantes > GolesLocales)
+            {
+                resultado = $"Gano {EquipoVisitante.Nombre}";
+            }
+            else
+            {
+                resultado = "Empate";
+            }
 
-                if (GolesLocales > GolesVisitantes)
-                {
-                    resultado = $"Gano {EquipoLocal.Nombre}";
-                }
-                else if (GolesVisitantes > GolesLocales)
-                {
-                    resultado = $"Gano {EquipoVisitante.Nombre}";
-                }
-                else
-                {
-                    resultado = "Empate";
-                }
-
-                return resultado;
-
+            return resultado;
             }
             set { }
         }
