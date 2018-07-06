@@ -4,22 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Prode.Core.Entidades;
 using Prode.Core.Entidades.Interfaces;
+using Prode.Core.Excepciones;
 
 namespace WebApplicationMVC.Controllers
 {
+    [Route("[controller]")]
     public class PartidoController : Controller
     {
         private readonly IFormateador formateador;
+        public ILogger logger { get; set; }
 
-
-        public PartidoController(IFormateador formateador)
+        public PartidoController(IFormateador formateador, ILogger<PartidoController> logger)
         {
             this.formateador = formateador;
+            this.logger = logger;
         }
         // GET: Partido
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var argentina = new Equipo
             {
@@ -41,13 +45,13 @@ namespace WebApplicationMVC.Controllers
         }
 
         // GET: Partido/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return View();
         }
 
         // GET: Partido/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -55,7 +59,7 @@ namespace WebApplicationMVC.Controllers
         // POST: Partido/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(IFormCollection collection)
         {
             try
             {
@@ -70,7 +74,7 @@ namespace WebApplicationMVC.Controllers
         }
 
         // GET: Partido/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
             return View();
         }
@@ -78,7 +82,7 @@ namespace WebApplicationMVC.Controllers
         // POST: Partido/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -93,7 +97,7 @@ namespace WebApplicationMVC.Controllers
         }
 
         // GET: Partido/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             return View();
         }
@@ -101,7 +105,7 @@ namespace WebApplicationMVC.Controllers
         // POST: Partido/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -137,6 +141,42 @@ namespace WebApplicationMVC.Controllers
             };
 
             return View(partido);
+        }
+
+        [Route("{equipo1}-{equipo2}")]
+        public IActionResult Detalle(string equipo1, string equipo2)
+        {
+            if (equipo1.Length > 3)
+            {
+                throw new ArgumentException("El equipo 1 es incorrecto");
+            }
+            if (equipo1.Equals("RIB", StringComparison.CurrentCultureIgnoreCase) 
+                || equipo2.Equals("RIB", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var ex =  new PartidoMalFormadoException() {
+                    Equipo1 = equipo1,
+                    Equipo2 = equipo2
+                };
+
+                logger.LogError(ex.ToString());
+            }
+            try
+            {
+                var resultado = equipo1.Length / (equipo2.Length - 1);
+                ViewBag.Resultado = resultado;
+            }
+            catch (DivideByZeroException ex)
+            {
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+            return View();
         }
     }
 }
