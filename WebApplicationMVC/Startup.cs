@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,7 @@ namespace WebApplicationMVC
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var demo = Configuration["Ambiente"];  
         }
 
         public IConfiguration Configuration { get; }
@@ -39,6 +41,7 @@ namespace WebApplicationMVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -58,6 +61,7 @@ namespace WebApplicationMVC
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

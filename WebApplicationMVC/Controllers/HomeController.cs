@@ -3,18 +3,29 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationMVC.Models;
 
 namespace WebApplicationMVC.Controllers
 {
-    
+    [Authorize]
     public class HomeController : Controller
     {
-        
+        private readonly IHostingEnvironment hostingEnvironment;
+        public HomeController(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public IActionResult Index()
         {
-            return View();
+            ViewBag.Ambiente = hostingEnvironment.EnvironmentName;
+            var estaAutenticado = HttpContext.User.Identity.IsAuthenticated;
+
+            if (estaAutenticado) return View();
+
+            return RedirectToAction("Login", "Account");
         }
         
         public IActionResult About()
